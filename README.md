@@ -1,4 +1,5 @@
-# locations_api
+# beacon-api
+
 
 ## Quick Start 
 
