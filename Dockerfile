@@ -1,13 +1,13 @@
-from golang:1.19 as build
-workdir /app
-copy ./ .
-run CGO_ENABLED=0 GOOS=linux go build -o server cmd/main.go
+FROM golang:1.19 as build
+WORKDIR /app
+COPY ./ .
+RUN CGO_ENABLED=0 GOOS=linux go build -o server cmd/main.go
 
 
-from alpine
-workdir /opt/bin
-copy --from=build /app/server .
-copy ./docs .
+FROM alpine
+WORKDIR /opt/bin
+COPY --from=build /app/server .
+COPY ./docs .
 
 # NOTE: some env vars that you can fill in from here
 ## See README.md
@@ -17,4 +17,4 @@ copy ./docs .
 # env POSTGRES_HOST=localhost
 # env PORT=8080
 
-entrypoint ["./server"]
+ENTRYPOINT [ "./server" ]
