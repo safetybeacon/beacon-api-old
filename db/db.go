@@ -7,7 +7,8 @@ import (
 	"time"
 
 	_ "github.com/lib/pq"
-	"github.com/t4ke0/locations_api/pkg/api"
+
+	"github.com/safetybeacon/beacon-api/pkg/api"
 )
 
 var (

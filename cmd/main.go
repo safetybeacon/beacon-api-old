@@ -7,11 +7,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
-	"github.com/t4ke0/locations_api/db"
-	_ "github.com/t4ke0/locations_api/docs"
-	"github.com/t4ke0/locations_api/pkg/handlers"
+	"github.com/safetybeacon/beacon-api/db"
+	_ "github.com/safetybeacon/beacon-api/docs"
+	"github.com/safetybeacon/beacon-api/pkg/handlers"
 )
 
 var (

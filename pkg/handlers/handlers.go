@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/rs/xid"
 
-	"github.com/t4ke0/locations_api/db"
-	"github.com/t4ke0/locations_api/pkg/api"
+	"github.com/safetybeacon/beacon-api/db"
+	"github.com/safetybeacon/beacon-api/pkg/api"
 )
 
 const AuthTokenName string = "X-Auth-Token"

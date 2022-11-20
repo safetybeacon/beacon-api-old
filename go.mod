@@ -1,4 +1,4 @@
-module github.com/t4ke0/locations_api
+module github.com/safetybeacon/beacon-api
 
 go 1.19
 
