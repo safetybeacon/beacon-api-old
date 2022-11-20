@@ -1,0 +1,251 @@
+basePath: /v1
+definitions:
+  api.AddLocationRequest:
+    properties:
+      position:
+        $ref: '#/definitions/api.Position'
+      private:
+        type: boolean
+      timestamp:
+        type: string
+    type: object
+  api.AddLocationResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+  api.Location:
+    properties:
+      firstname:
+        type: string
+      lastname:
+        type: string
+      position:
+        $ref: '#/definitions/api.Position'
+      private:
+        type: boolean
+      timestamp:
+        type: string
+    type: object
+  api.LoginRequest:
+    properties:
+      device:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  api.LoginResponse:
+    properties:
+      id:
+        type: integer
+      token:
+        type: string
+    type: object
+  api.LogoutRequest:
+    properties:
+      tokens:
+        items:
+          type: integer
+        type: array
+    type: object
+  api.LogoutResponse:
+    properties:
+      invalidated:
+        items:
+          type: integer
+        type: array
+    type: object
+  api.Position:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
+  api.RegisterRequest:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+    type: object
+  api.RegisterResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Safety Beacon API
+  title: beacon-api
+  version: "1.0"
+paths:
+  /auth/{userid}/logout:
+    delete:
+      consumes:
+      - application/json
+      description: Logout user.
+      parameters:
+      - description: user id
+        in: path
+        name: userid
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: X-Auth-Token
+        required: true
+        type: string
+      - description: logout json request
+        in: body
+        name: LogoutRequest
+        required: true
+        schema:
+          $ref: '#/definitions/api.LogoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.LogoutResponse'
+        "400":
+          description: ""
+        "401":
+          description: ""
+        "500":
+          description: ""
+      summary: Logout user.
+      tags:
+      - auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: authenticate user.
+      parameters:
+      - description: login json request
+        in: body
+        name: LoginRequest
+        required: true
+        schema:
+          $ref: '#/definitions/api.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.LoginResponse'
+        "400":
+          description: ""
+        "500":
+          description: ""
+      summary: login user.
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: create new user.
+      parameters:
+      - description: register json request
+        in: body
+        name: RegisterRequest
+        required: true
+        schema:
+          $ref: '#/definitions/api.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RegisterResponse'
+        "400":
+          description: ""
+        "500":
+          description: ""
+      summary: register user.
+      tags:
+      - auth
+  /locations/:
+    get:
+      consumes:
+      - application/json
+      description: Get locations.
+      parameters:
+      - description: token
+        in: header
+        name: X-Auth-Token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/api.Location'
+            type: array
+        "400":
+          description: ""
+        "401":
+          description: ""
+        "500":
+          description: ""
+      summary: Get locations.
+      tags:
+      - locations
+  /locations/{userid}:
+    post:
+      consumes:
+      - application/json
+      description: Add new location.
+      parameters:
+      - description: user id
+        in: path
+        name: userid
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: X-Auth-Token
+        required: true
+        type: string
+      - description: add location json request
+        in: body
+        name: AddLocationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/api.AddLocationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.AddLocationResponse'
+        "400":
+          description: ""
+        "401":
+          description: ""
+        "500":
+          description: ""
+      summary: Add new location.
+      tags:
+      - locations
+swagger: "2.0"

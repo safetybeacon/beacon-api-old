@@ -46,6 +46,16 @@ func (h Handler) AuthorizeUser(c *gin.Context) (bool, error) {
 }
 
 // HandleRegister
+// @Summary register user.
+// @Description create new user.
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param RegisterRequest body api.RegisterRequest true "register json request"
+// @Success 200 {object} api.RegisterResponse
+// @Failure 400
+// @Failure 500
+// @Router /auth/register [post]
 func (h Handler) HandleRegister(c *gin.Context) {
 	var req api.RegisterRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -77,7 +87,7 @@ func (h Handler) HandleRegister(c *gin.Context) {
 		panic(err)
 	}
 
-	err = conn.NewUser(
+	id, err := conn.NewUser(
 		req.Email,
 		req.Password,
 		req.Firstname,
@@ -94,10 +104,22 @@ func (h Handler) HandleRegister(c *gin.Context) {
 		panic(err)
 	}
 
-	c.Status(http.StatusCreated)
+	c.JSON(http.StatusCreated, api.RegisterResponse{
+		Id: id,
+	})
 }
 
 // HandleLogin
+// @Summary login user.
+// @Description authenticate user.
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param LoginRequest body api.LoginRequest true "login json request"
+// @Success 200 {object} api.LoginResponse
+// @Failure 400
+// @Failure 500
+// @Router /auth/login [post]
 func (h Handler) HandleLogin(c *gin.Context) {
 	var req api.LoginRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -148,6 +170,19 @@ func (h Handler) HandleLogin(c *gin.Context) {
 }
 
 // HandleLogout
+// @Summary Logout user.
+// @Description Logout user.
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param userid path int true "user id"
+// @Param X-Auth-Token header string true "token"
+// @Param LogoutRequest body api.LogoutRequest true "logout json request"
+// @Success 200 {object} api.LogoutResponse
+// @Failure 400
+// @Failure 401
+// @Failure 500
+// @Router /auth/{userid}/logout [delete]
 func (h Handler) HandleLogout(c *gin.Context) {
 	defer h.ErrorHandler(c)
 	ok, err := h.AuthorizeUser(c)
@@ -192,6 +227,19 @@ func (h Handler) HandleLogout(c *gin.Context) {
 
 }
 
+// @Summary Add new location.
+// @Description Add new location.
+// @Tags locations
+// @Accept json
+// @Produce json
+// @Param userid path int true "user id"
+// @Param X-Auth-Token header string true "token"
+// @Param AddLocationRequest body api.AddLocationRequest true "add location json request"
+// @Success 200 {object} api.AddLocationResponse
+// @Failure 400
+// @Failure 401
+// @Failure 500
+// @Router /locations/{userid} [post]
 func (h Handler) HandleAddLocation(c *gin.Context) {
 	defer h.ErrorHandler(c)
 	ok, err := h.AuthorizeUser(c)
@@ -250,6 +298,18 @@ func (h Handler) HandleAddLocation(c *gin.Context) {
 	})
 }
 
+// HandleGetLocations
+// @Summary Get locations.
+// @Description Get locations.
+// @Tags locations
+// @Accept json
+// @Produce json
+// @Param X-Auth-Token header string true "token"
+// @Success 200 {object} []api.Location
+// @Failure 400
+// @Failure 401
+// @Failure 500
+// @Router /locations/ [get]
 func (h Handler) HandleGetLocations(c *gin.Context) {
 	defer h.ErrorHandler(c)
 	conn, err := db.NewDB(h.PostgresLink)

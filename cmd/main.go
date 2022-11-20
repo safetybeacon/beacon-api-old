@@ -6,8 +6,11 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 
 	"github.com/t4ke0/locations_api/db"
+	_ "github.com/t4ke0/locations_api/docs"
 	"github.com/t4ke0/locations_api/pkg/handlers"
 )
 
@@ -37,6 +40,13 @@ func init() {
 	}
 }
 
+// @title beacon-api
+// @version 1.0
+// @description Safety Beacon API
+
+// @host localhost:8080
+// @BasePath /v1
+
 func main() {
 
 	router := gin.Default()
@@ -46,6 +56,11 @@ func main() {
 	}
 
 	v1 := router.Group("/v1")
+
+	swaggerDocs := v1.Group("/swagger")
+	{
+		swaggerDocs.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 
 	auth := v1.Group("/auth")
 	{

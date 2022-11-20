@@ -18,3 +18,13 @@ go build -o server cmd/main.go
 ```bash
 ./server
 ```
+
+## Swagger docs
+
+you can find swagger docs on
+
+```
+http://localhost:<port>/v1/swagger/index.html
+```
+
+![swagger_docs](./swagger_docs.png)

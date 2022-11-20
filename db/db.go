@@ -75,29 +75,33 @@ func (d Db) NewUser(
 	email, password,
 	firstname, lastname,
 	city, country string,
-) error {
+) (int, error) {
 
 	u, err := d.GetUser(email)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	if u.Id != 0 {
-		return ErrUserEmailAlreadyExist
+		return 0, ErrUserEmailAlreadyExist
 	}
 
 	result, err := d.conn.Exec(`
 INSERT INTO users(email, password, firstname, lastname, city, country, timecreated)
 VALUES($1, $2, $3, $4, $5, $6, $7)`, email, password, firstname, lastname, city, country, time.Now())
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	if n, _ := result.RowsAffected(); n == 0 {
-		return fmt.Errorf("failed to insert new user into db")
+		return 0, fmt.Errorf("failed to insert new user into db")
 	}
 
-	return nil
+	var id int
+	if err := d.conn.QueryRow(`SELECT last_value FROM users_id_seq`).Scan(&id); err != nil {
+		return id, err
+	}
+	return id, nil
 }
 
 type User struct {
