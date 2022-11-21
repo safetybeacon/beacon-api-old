@@ -32,23 +32,20 @@ http://localhost:<port>/v1/swagger/index.html
 
 ## Docker
 
-```bash
-docker build -t beacon-api:v1 .
-```
-
-
-### NOTE:
-
-- You can specify some environment variables when building the image (in
-Dockerfile), Or you can use `-e` flag to specify the key and value when running
-the image.
-
-- If you are going to use docker-compose you can add the environment variables in
-`environment`.
-
-- If you are going to use the image with k8s pod you just need to add as well the
-env vars under the container specs -> environment.
+- run `docker-compose.yml` file
 
 ```bash
-docker run -p 8080:8080 --network=host beacon-api:v1
+export db_password=<value>
 ```
+
+```bash
+docker-compose up --build -d
+```
+
+- to check the status of the pods
+
+```bash
+docker-compose ps
+```
+
+- you can test the API using swagger navigate to `http://localhost:8080/v1/swagger/index.html`
